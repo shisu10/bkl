@@ -57,5 +57,23 @@ application.add_middleware(
 # 静态资源目录
 application.mount('/static', StaticFiles(directory=settings.STATIC_DIR), name="static")
 application.state.views = Jinja2Templates(directory=settings.TEMPLATE_DIR)
+#app.state.后面可以任意命名
+
+app = application
+
+# app.py
+# ... 保持原有代码不变，在文件最后（app = application 之前）添加：
+
+# 直接注册 Tortoise ORM（绕过 startup 事件）
+from tortoise.contrib.fastapi import register_tortoise
+import os
+
+register_tortoise(
+    application,
+    db_url=f"mysql://{os.getenv('BASE_USER', 'root')}:{os.getenv('BASE_PASSWORD', '123456')}@{os.getenv('BASE_HOST', '127.0.0.1')}:{os.getenv('BASE_PORT', 3306)}/{os.getenv('BASE_DB', 'base')}",
+    modules={"models": ["models.base"]},
+    generate_schemas=True,
+    add_exception_handlers=True,
+)
 
 app = application

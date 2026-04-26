@@ -10,7 +10,7 @@ from tortoise import Model, fields
 
 class User(Model):
     username = fields.CharField(null=True, max_length=20, description="用户名")
-    type = fields.BooleanField(default=False, description="用户类型 True:超级管理员 False:普通管理员")
+    type = fields.BooleanField(default=0, description="用户类型 True:超级管理员 False:普通管理员")
     password = fields.CharField(null=True, max_length=255)
     nickname = fields.CharField(default='binkuolo', max_length=255, description='昵称')
     u_phone = fields.CharField(null=True, description="手机号", max_length=11)

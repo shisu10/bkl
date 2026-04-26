@@ -10,17 +10,15 @@ from fastapi import FastAPI
 from database.mysql import register_mysql
 
 
+
 def startup(app: FastAPI) -> Callable:
     """
     FastApi 启动完成事件
-    :param app: FastAPI
-    :return: start_app
     """
     async def app_start() -> None:
-        # APP启动完成后触发
         print("启动完毕")
-        # 注册数据库
-        await register_mysql(app)
+        # 去掉 await，register_mysql 是同步函数
+        register_mysql(app)
         pass
     return app_start
 
