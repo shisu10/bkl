@@ -69,9 +69,13 @@ async def account_login(post: AccountLogin):
         "user_type": get_user.user_type
     }
     jwt_token = create_access_token(data=jwt_data)
-    return success(msg="登陆成功😄", data={"token": jwt_token})
+    # return success(msg="登陆成功😄", data={"token": jwt_token})
     return JSONResponse({
         "code": 200,
         "message": "登陆成功😄",
         "data": {}
     }, status_code=200, headers={"Set-Cookie": "X-token=Bearer "+jwt_token})
+                                """
+                                    设置cookie，用户端自动返回cookie
+                                    cookie带着jwt,自动验证权限
+                                """
