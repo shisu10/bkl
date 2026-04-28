@@ -75,7 +75,9 @@ async def account_login(post: AccountLogin):
         "message": "登陆成功😄",
         "data": {}
     }, status_code=200, headers={"Set-Cookie": "X-token=Bearer "+jwt_token})
-                                """
-                                    设置cookie，用户端自动返回cookie
-                                    cookie带着jwt,自动验证权限
-                                """
+
+    """
+        headers={"Set-Cookie": "X-token=Bearer "+jwt_token}
+        设置cookie,用户端自动返回cookie
+        cookie带着jwt,自动验证权限
+    """
