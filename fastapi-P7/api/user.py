@@ -54,12 +54,21 @@ async def get_user_rules(user_id: int):
     :return:
     """
 
+
+
+    """
+        Role.filter(user__id=user_id)
+        1. 拿 `user_id=3`
+        2. 去中间表找 `user_id=3` → 得到 `role_id=1, 2`
+        3. 去 Role 表找 `id in (1,2)`
+        4. 返回角色对象
+    """
     # 查询当前用户拥有的角色
     user_role = await Role.filter(user__id=user_id).values("role_name")
     # 查询当前用户的所有权限
     user_access_list = await Access.filter(role__user__id=user_id, is_check=True).values("id", "scopes")
     # 验证当前用户对当前域是否有权限
-    is_pass = await Access.get_or_none(role__user__id=user_id, is_check=True, scopes="article_push", role__role_status=True)
+    is_pass = await Access.get_or_none(role__user__id=user_id, is_check=True, scopes="user_info", role__role_status=True)
     data = {
         "user_role": user_role,
         "pass": True if is_pass else False,

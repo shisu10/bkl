@@ -16,7 +16,10 @@ class TimestampMixin(Model):
     class Meta:
         table = None
 
-
+    """
+        一个表可被多个表融合字段，多个表的字段也可以融入到一个表
+        因为 TimestampMixin 已经继承了 Model，所以 Role(TimestampMixin) 不用再写 Model
+    """
 class Role(TimestampMixin):
     role_name = fields.CharField(max_length=15, description="角色名称")
     user: fields.ManyToManyRelation["User"] = \
@@ -65,7 +68,36 @@ class Access(TimestampMixin):
         table_description = "权限表"
         table = "access"
 
+    """
+        多对多关系的确定，tortoise自动生成**中间表**
 
+        Role:
+            user: fields.ManyToManyRelation["User"] = \
+                fields.ManyToManyField("base.User", related_name="role", on_delete=fields.CASCADE)
+            access: fields.ManyToManyRelation["Access"] = \
+                fields.ManyToManyField("base.Access", related_name="role", on_delete=fields.CASCADE)
+        User:
+            role: fields.ManyToManyRelation[Role]
+        Access:
+            role: fields.ManyToManyRelation[Role]
+
+        1.fields.ManyToManyRelation["User"]role: fields.ManyToManyRelation[Role]
+        不加引号填入参数只适用于已存在该类，建议无脑加引号
+        2.fields.ManyToManyField("base.User", related_name="role", on_delete=fields.CASCADE)
+        base.User   base是数据库名
+
+        related_name="role"     关系的对称的
+
+        on_delete=fields.CASCADE
+        | 值 | 效果 |
+        |---|------|
+        | **CASCADE** | 删 Role → 中间表关联记录也删 |
+        | **RESTRICT** | 中间表有关联记录 → 禁止删 Role |
+        | SET_NULL | 外键变 NULL(多对多不常用) |
+        | NO_ACTION | 同 RESTRICT |
+
+
+    """
 class AccessLog(TimestampMixin):
     user_id = fields.IntField(description="用户ID")
     target_url = fields.CharField(null=True, description="访问的url", max_length=255)

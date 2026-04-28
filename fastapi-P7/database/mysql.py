@@ -13,16 +13,7 @@ import os
 # -----------------------数据库配置-----------------------------------
 DB_ORM_CONFIG = {
     "connections": {
-        "base": {
-            'engine': 'tortoise.backends.mysql',
-            "credentials": {
-                'host': os.getenv('BASE_HOST', '127.0.0.1'),
-                'user': os.getenv('BASE_USER', 'root'),
-                'password': os.getenv('BASE_PASSWORD', '123456'),
-                'port': int(os.getenv('BASE_PORT', 3306)),
-                'database': os.getenv('BASE_DB', 'base'),
-            }
-        },
+        "base": "sqlite://base.sqlite3",
         # "db2": {
         #     'engine': 'tortoise.backends.mysql',
         #     "credentials": {
@@ -60,6 +51,6 @@ async def register_mysql(app: FastAPI):
     register_tortoise(
         app,
         config=DB_ORM_CONFIG,
-        generate_schemas=False,
+        generate_schemas=True,
         add_exception_handlers=True,
     )

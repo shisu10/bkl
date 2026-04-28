@@ -35,7 +35,7 @@ def check_password(password: str, old: str):
     :param password: 用户输入的密码
     :param old: 数据库密码
     :return: Boolean
-    """
+    """                         #哈希值本身带有参数信息，用这些信息和密码再生成一次哈希值后比对
     check = pbkdf2_sha256.verify(password, old)
     if check:
         return True
