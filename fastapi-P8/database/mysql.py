@@ -45,7 +45,7 @@ DB_ORM_CONFIG = {
     'timezone': 'Asia/Shanghai'
 }
 
-
+#tortoise与app产生连接
 async def register_mysql(app: FastAPI):
     # 注册数据库
     register_tortoise(
